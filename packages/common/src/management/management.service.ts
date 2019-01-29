@@ -27,8 +27,12 @@ namespace Online {
           const mPod = this.pods[pod.metadata.uid];
           if (!mPod) {
             // FIXME: read Jolokia port from container spec
-            const port = 8778;
-            const url = new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/https:${pod.metadata.name}:${port}/proxy/jolokia/`)
+            const container = _.find(pod.spec.containers,
+              container => container.ports.some(port => port.name === 'jolokia'));
+            const port = _.find(container.ports, port => port.name === 'jolokia').containerPort;
+            const protocol = pod.metadata.annotations['hawt.io/jolokia-protocol'] || "https";
+            const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia';
+            const url = new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/${protocol}:${pod.metadata.name}:${port}/proxy${path}/`)
             this.pods[pod.metadata.uid] = new ManagedPod(pod, new Jolokia(url.valueOf()));
           } else {
             pod.management = mPod.pod.management;
