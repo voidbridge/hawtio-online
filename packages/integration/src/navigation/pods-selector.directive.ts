@@ -39,10 +39,12 @@ namespace Online {
         const container = _.find(pod.spec.containers,
           container => container.ports.some(port => port.name === 'jolokia'));
         const port = _.find(container.ports, port => port.name === 'jolokia').containerPort;
+        const protocol = pod.metadata.annotations['hawt.io/jolokia-protocol'] || "https";
+        const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia';
         return new URI()
           .path('/integration/')
           .query({
-            jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/https:${pod.metadata.name}:${port}/proxy/jolokia/`),
+            jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/${protocol}:${pod.metadata.name}:${port}/proxy${path}/`),
             title      : pod.metadata.name,
             // returnTo   : new URI().toString(),
           })
