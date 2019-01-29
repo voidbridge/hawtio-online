@@ -21,12 +21,11 @@ namespace Online {
 
       super();
 
-      openShiftService.on('changed', _ => {
+      openShiftService.on('changed', () => {
         const pods = openShiftService.getPods();
         openShiftService.getPods().forEach(pod => {
           const mPod = this.pods[pod.metadata.uid];
           if (!mPod) {
-            // FIXME: read Jolokia port from container spec
             const container = _.find(pod.spec.containers,
               container => container.ports.some(port => port.name === 'jolokia'));
             const port = _.find(container.ports, port => port.name === 'jolokia').containerPort;
