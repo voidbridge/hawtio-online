@@ -72,12 +72,16 @@ namespace Online {
   }
 
   function connectUrlFilter() {
-    return (pod, port = 8778) => new URI().path('/integration/')
-      .query({
-        jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/https:${pod.metadata.name}:${port}/proxy/jolokia/`),
-        title      : pod.metadata.name,
-        returnTo   : new URI().toString(),
-      });
+    return (pod, port = 8778) => {
+      const protocol = pod.metadata.annotations['hawt.io/jolokia-protocol'] || "https";
+      const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia';
+      return new URI().path('/integration/')
+        .query({
+          jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/${protocol}:${pod.metadata.name}:${port}/proxy${path}/`),
+          title      : pod.metadata.name,
+          returnTo   : new URI().toString(),
+        });
+    };
   }
 
   function podDetailsUrlFilter() {
