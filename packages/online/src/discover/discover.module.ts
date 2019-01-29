@@ -74,7 +74,7 @@ namespace Online {
   function connectUrlFilter() {
     return (pod, port = 8778) => new URI().path('/integration/')
       .query({
-        jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/https:${pod.metadata.name}:${port}/proxy/jolokia2/`),
+        jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/https:${pod.metadata.name}:${port}/proxy/jolokia/`),
         title      : pod.metadata.name,
         returnTo   : new URI().toString(),
       });
