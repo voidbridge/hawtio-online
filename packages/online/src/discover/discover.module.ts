@@ -75,7 +75,6 @@ namespace Online {
     return (pod, port = 8778) => {
       const protocol = pod.metadata.annotations['hawt.io/jolokia-protocol'] || "https";
       const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia';
-      console.log("connectUrlFilter: " + JSON.stringify(pod));
       return new URI().path('/integration/')
         .query({
           jolokiaUrl : new URI().query('').path(`/master/api/v1/namespaces/${pod.metadata.namespace}/pods/${protocol}:${pod.metadata.name}:${port}/proxy${path}/`),
