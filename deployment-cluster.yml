@@ -53,7 +53,7 @@ objects:
     tags:
     - from:
         kind: DockerImage
-        name: docker.io/hawtio/online:latest
+        name: docker.io/voidbridge/hawtio-online:latest
       importPolicy:
         scheduled: true
       name: latest
