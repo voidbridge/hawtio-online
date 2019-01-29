@@ -40,8 +40,7 @@ namespace Online {
           container => container.ports.some(port => port.name === 'jolokia'));
         const port = _.find(container.ports, port => port.name === 'jolokia').containerPort;
         const protocol = pod.metadata.annotations['hawt.io/jolokia-protocol'] || "https";
-        const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia3';
-        console.log("getConnectUrl: " + JSON.stringify(pod));
+        const path = pod.metadata.annotations['hawt.io/jolokia-path'] || '/jolokia';
         return new URI()
           .path('/integration/')
           .query({
